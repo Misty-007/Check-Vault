@@ -1,0 +1,5 @@
+filename,label,ela_score,metadata_suspicious_count,ocr_text_length,ocr_confidence,amount_count,max_amount,average_amount,amount_variance,date_count,suspicious_keyword_count
+clean_salary_01.png,genuine,28,0,950,82,8,55000,18000,220000000,4,0
+clean_bank_01.png,genuine,31,0,1400,78,24,75000,12500,180000000,12,0
+tampered_salary_01.png,tampered,91,2,880,61,8,155000,42000,3100000000,4,1
+tampered_bank_01.png,tampered,86,1,1250,58,25,500000,46000,8900000000,12,0

@@ -1,0 +1,10 @@
+.kaggle/
+external_data/
+__pycache__/
+*.pyc
+venv/
+.streamlit/
+.agents/
+.codex/
+work/
+outputs/

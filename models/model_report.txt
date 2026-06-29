@@ -1,0 +1,11 @@
+Best model: random_forest
+Macro F1: 0.752
+
+              precision    recall  f1-score   support
+
+     genuine       0.76      0.74      0.75       301
+    tampered       0.75      0.76      0.75       300
+
+    accuracy                           0.75       601
+   macro avg       0.75      0.75      0.75       601
+weighted avg       0.75      0.75      0.75       601

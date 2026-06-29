@@ -1,0 +1,10 @@
+streamlit
+numpy
+pandas
+pillow
+opencv-python
+pymupdf
+plotly
+scikit-learn
+joblib
+pytesseract
