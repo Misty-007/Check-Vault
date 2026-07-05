@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from modules.ela import run_ela
@@ -138,6 +139,23 @@ st.markdown(
         margin: 0.75rem 0 1rem;
         font-size: 0.94rem;
     }
+    .cv-ocr-notice {
+    background: #fff0f7;
+    border: 1px solid #f4b6d2;
+    border-left: 6px solid #e83e8c;
+    border-radius: 18px;
+    color: #a9145f;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0;
+    font-weight: 750;
+}
+
+.cv-ocr-notice span {
+    display: block;
+    color: #3b0a27;
+    font-weight: 500;
+    margin-top: 0.3rem;
+}
 
     .cv-small-card {
         color: var(--cv-pink-dark);
@@ -350,7 +368,13 @@ risk_result = calculate_risk(features, metadata_result.flags, model_result)
 
 feature_df = pd.DataFrame([features])
 text_source = ocr_result.source if ocr_result.text else "manual fallback" if manual_text else "None"
-
+feature_highlights = [
+    ("ELA Mean", features.get("ela_mean", 0)),
+    ("ELA High Ratio", features.get("ela_high_ratio", 0) * 100),
+    ("Edge Density", features.get("image_edge_density", 0) * 100),
+    ("Image Entropy", features.get("image_entropy", 0)),
+    ("OCR Confidence", ocr_result.average_confidence),
+]
 summary_cols = st.columns(4)
 with summary_cols[0]:
     st.markdown(
@@ -424,6 +448,65 @@ score_col, decision_col, model_col = st.columns(3)
 score_col.metric("Fraud Risk Score", f"{risk_result.score}/100")
 decision_col.metric("Recommendation", risk_result.recommendation)
 model_col.metric("Model Signal", model_result.label)
+chart_left, chart_right = st.columns([0.9, 1.1])
+
+with chart_left:
+    gauge_color = "#16a34a" if risk_result.score <= 30 else "#d97706" if risk_result.score <= 65 else "#dc2626"
+    gauge = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=risk_result.score,
+            number={"suffix": "/100", "font": {"size": 34, "color": "#a9145f"}},
+            title={"text": "Fraud Risk Gauge", "font": {"size": 20, "color": "#211827"}},
+            gauge={
+                "axis": {"range": [0, 100], "tickcolor": "#786070"},
+                "bar": {"color": gauge_color},
+                "bgcolor": "#fff7fb",
+                "borderwidth": 1,
+                "bordercolor": "#f4b6d2",
+                "steps": [
+                    {"range": [0, 30], "color": "#dcfce7"},
+                    {"range": [30, 65], "color": "#fef3c7"},
+                    {"range": [65, 100], "color": "#fee2e2"},
+                ],
+            },
+        )
+    )
+    gauge.update_layout(
+        height=280,
+        margin={"l": 20, "r": 20, "t": 48, "b": 10},
+        paper_bgcolor="rgba(0,0,0,0)",
+        font={"family": "Aptos, sans-serif"},
+    )
+    st.plotly_chart(gauge, use_container_width=True)
+
+with chart_right:
+    chart_df = pd.DataFrame(feature_highlights, columns=["Signal", "Value"])
+    bars = go.Figure(
+        go.Bar(
+            x=chart_df["Value"],
+            y=chart_df["Signal"],
+            orientation="h",
+            marker={
+                "color": ["#a9145f", "#e83e8c", "#f472b6", "#f9a8d4", "#be185d"],
+                "line": {"color": "#ffffff", "width": 1},
+            },
+            text=[f"{value:.2f}" for value in chart_df["Value"]],
+            textposition="auto",
+        )
+    )
+    bars.update_layout(
+        title={"text": "Key Forensic Signal Strength", "font": {"size": 20, "color": "#211827"}},
+        height=280,
+        margin={"l": 20, "r": 20, "t": 48, "b": 20},
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#fff7fb",
+        xaxis={"title": "", "gridcolor": "#fbcfe8", "zeroline": False},
+        yaxis={"title": "", "autorange": "reversed"},
+        font={"family": "Aptos, sans-serif", "color": "#211827"},
+        showlegend=False,
+    )
+    st.plotly_chart(bars, use_container_width=True)
 
 st.subheader("Decision Rationale")
 for reason in risk_result.reasons:
