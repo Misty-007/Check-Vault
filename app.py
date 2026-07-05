@@ -268,11 +268,10 @@ st.markdown(
 st.markdown(
     """
     <div class="cv-hero">
-        <div class="cv-kicker">Underwriting Intelligence Suite</div>
+        <div class="cv-kicker"></div>
         <h1 class="cv-title">CheckVault</h1>
         <p class="cv-subtitle">
-            Offline document forensics for loan, KYC, salary-slip, and property-file
-            verification with explainable forgery signals and risk recommendations.
+            Offline document forensics with forgery signals and risk recommendations.
         </p>
         <div class="cv-chip-row">
             <span class="cv-chip">Offline OCR</span>
@@ -330,7 +329,7 @@ if ocr_result.warning and not ocr_result.text:
     manual_text = st.text_area(
         "Optional fallback: paste document text here for financial/risk analysis",
         height=140,
-        placeholder="Example: Net Salary INR 55,100, Closing Balance INR 66,430...",
+        placeholder="Example: Net Salary INR 55,100, Closing Balance INR 66,430",
     )
 
 analysis_text = manual_text.strip() or ocr_result.text
@@ -349,7 +348,7 @@ model_result = predict_with_model(MODEL_PATH, features)
 risk_result = calculate_risk(features, metadata_result.flags, model_result)
 
 feature_df = pd.DataFrame([features])
-text_source = ocr_result.source if ocr_result.text else "manual fallback" if manual_text else "none"
+text_source = ocr_result.source if ocr_result.text else "manual fallback" if manual_text else "None"
 
 summary_cols = st.columns(4)
 with summary_cols[0]:
@@ -439,7 +438,7 @@ with detail_left:
 with detail_right:
     st.subheader("Metadata Review")
     if metadata_result.flags:
-        for flag in metadata_result.flags:
+        for flag in metadata_result.fe lags:
             st.warning(flag)
     else:
         st.success("No suspicious metadata signals found.")
@@ -469,7 +468,7 @@ st.download_button(
 st.markdown(
     """
     <div class="cv-disclaimer">
-        Model transparency: the local classifier was trained on a balanced tampered-document
+        Model transparency: The local classifier was trained on a balanced tampered-document
         subset using ELA, image statistics, OCR-derived signals, and metadata features.
         Current validation macro F1 is approximately 0.75, so the output is best used
         as a triage and explainability layer rather than an autonomous rejection system.
