@@ -140,6 +140,7 @@ st.markdown(
     }
 
     .cv-small-card {
+        color: var(--cv-pink-dark);
         background: var(--cv-card);
         border: 1px solid #f8c7dc;
         border-radius: 20px;
@@ -149,7 +150,7 @@ st.markdown(
     }
 
     .cv-small-card-label {
-        color: var(--cv-muted);
+        color: #3b0a27;
         font-size: 0.78rem;
         font-weight: 900;
         text-transform: uppercase;
