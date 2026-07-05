@@ -344,12 +344,21 @@ ela_result = run_ela(image)
 
 manual_text = ""
 if ocr_result.warning and not ocr_result.text:
-    st.warning(ocr_result.warning)
-    manual_text = st.text_area(
-        "Optional fallback: paste document text here for financial/risk analysis",
-        height=140,
-        placeholder="Example: Net Salary INR 55,100, Closing Balance INR 66,430",
+    st.markdown(
+        f"""
+        <div class="cv-ocr-notice">
+            Image OCR needs attention
+            <span>{ocr_result.warning}</span>
+        </div>
+        """,
+        unsafe_allow_ht``ml=True,
     )
+    manual_text = st.text_area(
+        "Paste document text manually if OCR cannot read this file",
+        height=140,
+        placeholder="Example: Net Salary INR 55,100, Closing Balance INR 66,430...",
+    )
+       
 
 analysis_text = manual_text.strip() or ocr_result.text
 
