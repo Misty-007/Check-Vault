@@ -438,7 +438,7 @@ with detail_left:
 with detail_right:
     st.subheader("Metadata Review")
     if metadata_result.flags:
-        for flag in metadata_result.fe lags:
+        for flag in metadata_result.flags:
             st.warning(flag)
     else:
         st.success("No suspicious metadata signals found.")
