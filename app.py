@@ -351,7 +351,7 @@ if ocr_result.warning and not ocr_result.text:
             <span>{ocr_result.warning}</span>
         </div>
         """,
-        unsafe_allow_ht``ml=True,
+        unsafe_allow_html=True,
     )
     manual_text = st.text_area(
         "Paste document text manually if OCR cannot read this file",
